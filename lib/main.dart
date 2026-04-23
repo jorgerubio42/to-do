@@ -63,6 +63,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
                       return ListTile(
                         title: Text(item),
+                        trailing: IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: (){
+                            setState((){
+                              print("This index was removed: ${index}");
+                              _list.removeAt(index);
+                            });
+                          },
+                        ),
                       );
                     }
                   ),
