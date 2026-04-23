@@ -56,12 +56,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 Expanded(
-                  child: ListView.builder(
+                  child: ReorderableListView.builder(
                     itemCount: _list.length,
                     itemBuilder: (context, index){
                       final item = _list[index];
 
                       return ListTile(
+                        key: ValueKey("$item-$index"),
                         title: Text(item),
                         trailing: IconButton(
                           icon: Icon(Icons.delete),
@@ -73,6 +74,15 @@ class _MyHomePageState extends State<MyHomePage> {
                           },
                         ),
                       );
+                    },
+                    onReorder: (int oldIndex, int newIndex){
+                      setState((){
+                        if (oldIndex < newIndex){
+                          newIndex -= 1;
+                        }
+                        final item = _list.removeAt(oldIndex);
+                        _list.insert(newIndex, item);
+                      });
                     }
                   ),
                 ),
