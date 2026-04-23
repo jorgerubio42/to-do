@@ -30,6 +30,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var _controller = TextEditingController();
+  var _list = [];
 
   void dispose(){
     _controller.dispose();
@@ -54,8 +55,20 @@ class _MyHomePageState extends State<MyHomePage> {
                   _controller.text,
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _list.length,
+                    itemBuilder: (context, index){
+                      final item = _list[index];
+
+                      return ListTile(
+                        title: Text(item),
+                      );
+                    }
+                  ),
+                ),
               ]
-            )
+            ),
           ),
           Row(
             children: [
@@ -76,12 +89,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: IconButton(
                   icon: const Icon(Icons.send),
                   onPressed: (){
-                    setState((){});
+                    setState((){
+                      _list.add(_controller.text);
+                      _controller.clear();
+                    });
                   },
                 ),
               ),
             ]
-          )
+          ),
         ],
       ),
     );
