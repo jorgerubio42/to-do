@@ -1,5 +1,8 @@
 build/
 .dart_tool/
+pubspec.lock
+macos/Flutter/GeneratedPluginRegistrant.swift
+.flutter-plugins-dependencies
 
 # FVM Version Cache
 .fvm/
