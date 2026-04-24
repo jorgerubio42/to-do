@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,11 +31,30 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var _controller = TextEditingController();
-  var _list = [];
+  var _list = <String>[];
 
+  @override
+  void initState(){
+    super.initState();
+    _loadTasks();
+  }
+
+  @override
   void dispose(){
     _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadTasks() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState((){
+      _list = prefs.getStringList('tasks') ?? [];
+    });
+  }
+
+  Future<void> _saveTasks() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('tasks', _list);
   }
 
   @override
@@ -71,6 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               print("This index was removed: ${index}");
                               _list.removeAt(index);
                             });
+                            _saveTasks();
                           },
                         ),
                       );
@@ -83,6 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         final item = _list.removeAt(oldIndex);
                         _list.insert(newIndex, item);
                       });
+                      _saveTasks();
                     }
                   ),
                 ),
@@ -112,6 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       _list.add(_controller.text);
                       _controller.clear();
                     });
+                    _saveTasks();
                   },
                 ),
               ),
